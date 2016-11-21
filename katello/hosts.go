@@ -91,7 +91,7 @@ func (s *HostsService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, err
 	return *hosts, resp, err
 }
 
-func (s *HostsService) Create(name string, host *Host) (*Host, *Response, error) {
+func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 	u := "api/hosts"
 
 	req, err := s.client.NewRequest("POST", u, host)
