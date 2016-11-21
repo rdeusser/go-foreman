@@ -1,6 +1,10 @@
 package katello
 
-type HostService service
+import (
+	"fmt"
+)
+
+type HostsService service
 
 type Host struct {
 	Name                    *string                  `json:"name,omitempty"`
@@ -39,13 +43,8 @@ type Host struct {
 	ComputeAttributes       *ComputeAttributes       `json:"compute_attributes,omitempty"`
 }
 
-func (h *HostService) GetByID(id string) ([]*Host, *Response, error) {
-	i := fmt.Sprintf("api/hosts/%v", id)
-
-	u, err := addOptions(i, opt)
-	if err != nil {
-		return nil, nil, err
-	}
+func (s *HostsService) GetByID(id string) (*Host, *Response, error) {
+	u := fmt.Sprintf("api/hosts/%v", id)
 
 	req, err := s.client.NewRequest("GET", u, nil)
 	if err != nil {
@@ -53,7 +52,7 @@ func (h *HostService) GetByID(id string) ([]*Host, *Response, error) {
 	}
 
 	host := new(Host)
-	resp, err := s.client.Do(req, hosts)
+	resp, err := s.client.Do(req, host)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -71,7 +70,7 @@ type HostListAllOptions struct {
 	ListOptions
 }
 
-func (h *HostService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, error) {
+func (s *HostsService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, error) {
 	u, err := addOptions("api/hosts", opt)
 	if err != nil {
 		return nil, nil, err
@@ -91,7 +90,7 @@ func (h *HostService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, erro
 	return *hosts, resp, err
 }
 
-func (s *HostService) Create(name string, host *Host) (*Host, *Response, error) {
+func (s *HostsService) Create(name string, host *Host) (*Host, *Response, error) {
 	u := "api/hosts"
 
 	req, err := s.client.NewRequest("POST", u, host)

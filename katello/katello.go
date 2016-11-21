@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+
+	"github.com/google/go-querystring/query"
 )
 
 const (
@@ -26,7 +28,7 @@ type Client struct {
 	common service
 
 	// Services used for talking to different parts of the Katello/Foreman API.
-	Host *HostService
+	Hosts *HostsService
 }
 
 type service struct {
@@ -47,7 +49,7 @@ func NewClient(httpClient *http.Client) *Client {
 
 	c := &Client{client: httpClient, BaseURL: baseURL}
 	c.common.client = c
-	c.Host = (*HostService)(&c.common)
+	c.Hosts = (*HostsService)(&c.common)
 
 	return c
 }
