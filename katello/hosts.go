@@ -112,13 +112,13 @@ func (s *HostsService) Create(name string, host *Host) (*Host, *Response, error)
 type ComputeAttributes struct {
 	CPUs               *int    `json:"cpus,omitempty"`
 	Cores              *int    `json:"corespersocket,omitempty"`
-	Memory             *int    `json:"memory_mb"`
-	Cluster            *string `json:"cluster"`
-	Path               *string `json:"path"`
-	GuestID            *string `json:"guest_id"`
-	SCSIControllerType *string `json:"scsi_controller_type"`
-	HardwareVersion    *string `json:"hardware_version"`
-	Start              *bool   `json:"start"`
+	Memory             *int    `json:"memory_mb,omitempty"`
+	Cluster            *string `json:"cluster,omitempty"`
+	Path               *string `json:"path,omitempty"`
+	GuestID            *string `json:"guest_id,omitempty"`
+	SCSIControllerType *string `json:"scsi_controller_type,omitempty"`
+	HardwareVersion    *string `json:"hardware_version,omitempty"`
+	Start              *bool   `json:"start,omitempty"`
 }
 
 // InterfaceAttributes represents the attributes of a hosts' interface(s).
