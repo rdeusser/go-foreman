@@ -125,7 +125,7 @@ type ComputeAttributes struct {
 type InterfaceAttributes struct {
 	Mac               *string            `json:"mac,omitempty"`
 	IP                *string            `json:"ip,omitempty"`
-	IP6               *string            `json:ip6,omitempty`
+	IP6               *string            `json:"ip6,omitempty"`
 	Type              *string            `json:"type,omitempty"`
 	Name              *string            `json:"name,omitempty"`
 	SubnetID          *int               `json:"subnet_id,omitempty"`
