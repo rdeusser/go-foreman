@@ -7,10 +7,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 )
 
 const (
-	defaultBaseURL = "http://localhost/api"
+	defaultBaseURL = "http://localhost/"
 )
 
 type Client struct {
@@ -30,6 +31,11 @@ type Client struct {
 
 type service struct {
 	client *Client
+}
+
+type ListOptions struct {
+	Page    string `url:"page,omitempty"`
+	PerPage string `url:"per_page,omitempty"`
 }
 
 func NewClient(httpClient *http.Client) *Client {
@@ -109,4 +115,26 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 
 func newResponse(r *http.Response) *Response {
 	return &Response{Response: r}
+}
+
+// addOptions adds the parameters in opt as URL query parameters to s.  opt
+// must be a struct whose fields may contain "url" tags.
+func addOptions(s string, opt interface{}) (string, error) {
+	v := reflect.ValueOf(opt)
+	if v.Kind() == reflect.Ptr && v.IsNil() {
+		return s, nil
+	}
+
+	u, err := url.Parse(s)
+	if err != nil {
+		return s, err
+	}
+
+	qs, err := query.Values(opt)
+	if err != nil {
+		return s, err
+	}
+
+	u.RawQuery = qs.Encode()
+	return u.String(), nil
 }
