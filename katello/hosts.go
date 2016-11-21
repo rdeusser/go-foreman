@@ -27,7 +27,7 @@ type Host struct {
 	ModelID                 *int                     `json:"model_id,omitempty"`
 	HostGroupID             *int                     `json:"hostgroup_id,omitempty"`
 	OwnerID                 *int                     `json:"owner_id,omitempty"`
-	OwnerType               *User                    `json:"owner_type,omitempty"`
+	OwnerType               *string                  `json:"owner_type,omitempty"`
 	PuppetCAProxyID         *int                     `json:"puppet_ca_proxy_id,omitempty"`
 	ImageID                 *int                     `json:"image_id,omitempty"`
 	HostParameterAttributes *HostParameterAttributes `json:"host_parameter_attributes,omitempty"`
@@ -67,6 +67,7 @@ type HostListAllOptions struct {
 	EnvironmentID  string `url:"environment_id,omitempty"`
 	Search         string `url:"search,omitempty"`
 	Order          string `url:"order,omitempty"`
+
 	ListOptions
 }
 
@@ -107,23 +108,20 @@ func (s *HostsService) Create(name string, host *Host) (*Host, *Response, error)
 	return h, resp, err
 }
 
-type User struct{}
-
-type ComputeAttributes struct{}
-
-type IPMI struct{}
-
-type Mode struct {
-	BalanceRR    string `json:"balance-rr,omitempty"`
-	ActiveBackup string `json:"active-backup,omitempty"`
-	BalanceXOR   string `json:"balance-xor,omitempty"`
-	Broadcast    string `json:"broadcast,omitempty"`
-	AD           string `json:"802.3ad,omitempty"`
-	BalanceTLB   string `json:"balance-tlb,omitempty"`
-	BalanceALB   string `json:"balance-alb,omitempty"`
+// ComputeAttributes represents the attributes of a host.
+type ComputeAttributes struct {
+	CPUs               *int    `json:"cpus,omitempty"`
+	Cores              *int    `json:"corespersocket,omitempty"`
+	Memory             *int    `json:"memory_mb"`
+	Cluster            *string `json:"cluster"`
+	Path               *string `json:"path"`
+	GuestID            *string `json:"guest_id"`
+	SCSIControllerType *string `json:"scsi_controller_type"`
+	HardwareVersion    *string `json:"hardware_version"`
+	Start              *bool   `json:"start"`
 }
 
-// InterfaceAttributes represents the attributes of a hosts' interface(s)
+// InterfaceAttributes represents the attributes of a hosts' interface(s).
 type InterfaceAttributes struct {
 	Mac               *string            `json:"mac,omitempty"`
 	IP                *string            `json:"ip,omitempty"`
@@ -139,17 +137,17 @@ type InterfaceAttributes struct {
 	Provision         *bool              `json:"provision,omitempty"`
 	Username          *string            `json:"username,omitempty"`
 	Password          *string            `json:"password,omitempty"`
-	Provider          *IPMI              `json:"provider,omitempty"`
+	Provider          *string            `json:"provider,omitempty"`
 	Virtual           *bool              `json:"virtual,omitempty"`
 	Tag               *string            `json:"tag,omitempty"`
 	AttachedTo        *string            `json:"attached_to,omitempty"`
-	Mode              *Mode              `json:"mode,omitempty"`
+	Mode              *string            `json:"mode,omitempty"`
 	AttachedDevices   *[]string          `json:"attached_devices,omitempty"`
 	BondOptions       *string            `json:"bond_options,omitempty"`
 	ComputeAttributes *ComputeAttributes `json:"compute_attributes,omitempty"`
 }
 
-// HostParameterAttributes represents the Host's parameters
+// HostParameterAttributes represents the Host's parameters.
 type HostParameterAttributes struct {
 	Name  *string `json:"name,omitempty"`
 	Value *string `json:"value,omitempty"`
