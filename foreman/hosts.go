@@ -1,4 +1,4 @@
-package katello
+package foreman
 
 import (
 	"fmt"
@@ -85,7 +85,7 @@ func (s *HostsService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, err
 	hosts := new([]*Host)
 	resp, err := s.client.Do(req, hosts)
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return *hosts, resp, err
@@ -102,7 +102,7 @@ func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 	h := new(Host)
 	resp, err := s.client.Do(req, h)
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return h, resp, err
