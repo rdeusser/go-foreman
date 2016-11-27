@@ -2,6 +2,7 @@ package foreman
 
 import (
 	"fmt"
+	"strings"
 )
 
 type HostsService service
@@ -44,7 +45,12 @@ type Host struct {
 }
 
 func (s *HostsService) GetByID(id string) (*Host, *Response, error) {
-	u := fmt.Sprintf("api/hosts/%v", id)
+	// According to the API docs, there should be no leading or trailing whitespace.
+	// Instead of leaving that up to the user, I prefer to just go ahead and take care
+	// of that for them.
+	id = strings.TrimSpace(id)
+
+	u := fmt.Sprintf("api/hosts/%s", id)
 
 	req, err := s.client.NewRequest("GET", u, nil)
 	if err != nil {
@@ -60,7 +66,7 @@ func (s *HostsService) GetByID(id string) (*Host, *Response, error) {
 	return host, resp, err
 }
 
-type HostListAllOptions struct {
+type HostGetAllOptions struct {
 	HostGroupID    string `url:"hostgroup_id,omitempty"`
 	LocationID     string `url:"location_id,omitempty"`
 	OrganizationID string `url:"organization_id,omitempty"`
@@ -68,10 +74,10 @@ type HostListAllOptions struct {
 	Search         string `url:"search,omitempty"`
 	Order          string `url:"order,omitempty"`
 
-	ListOptions
+	GetOptions
 }
 
-func (s *HostsService) ListAll(opt *HostListAllOptions) ([]*Host, *Response, error) {
+func (s *HostsService) GetAll(opt *HostGetAllOptions) ([]*Host, *Response, error) {
 	u, err := addOptions("api/hosts", opt)
 	if err != nil {
 		return nil, nil, err

@@ -35,7 +35,7 @@ type service struct {
 	client *Client
 }
 
-type ListOptions struct {
+type GetOptions struct {
 	Page    string `url:"page,omitempty"`
 	PerPage string `url:"per_page,omitempty"`
 }
