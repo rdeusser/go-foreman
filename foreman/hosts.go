@@ -44,6 +44,51 @@ type Host struct {
 	ComputeAttributes       *ComputeAttributes       `json:"compute_attributes,omitempty"`
 }
 
+// ComputeAttributes represents the attributes of a host.
+type ComputeAttributes struct {
+	CPUs               *int    `json:"cpus,omitempty"`
+	Cores              *int    `json:"corespersocket,omitempty"`
+	Memory             *int    `json:"memory_mb,omitempty"`
+	Cluster            *string `json:"cluster,omitempty"`
+	Path               *string `json:"path,omitempty"`
+	GuestID            *string `json:"guest_id,omitempty"`
+	SCSIControllerType *string `json:"scsi_controller_type,omitempty"`
+	HardwareVersion    *string `json:"hardware_version,omitempty"`
+	Start              *bool   `json:"start,omitempty"`
+}
+
+// InterfaceAttributes represents the attributes of a hosts' interface(s).
+type InterfaceAttributes struct {
+	Mac               *string            `json:"mac,omitempty"`
+	IP                *string            `json:"ip,omitempty"`
+	IP6               *string            `json:"ip6,omitempty"`
+	Type              *string            `json:"type,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	SubnetID          *int               `json:"subnet_id,omitempty"`
+	Subnet6ID         *int               `json:"subnet6_id,omitempty"`
+	DomainID          *int               `json:"domain_id,omitempty"`
+	Identifier        *string            `json:"identifier,omitempty"`
+	Managed           *bool              `json:"managed,omitempty"`
+	Primary           *bool              `json:"primary,omitempty"`
+	Provision         *bool              `json:"provision,omitempty"`
+	Username          *string            `json:"username,omitempty"`
+	Password          *string            `json:"password,omitempty"`
+	Provider          *string            `json:"provider,omitempty"`
+	Virtual           *bool              `json:"virtual,omitempty"`
+	Tag               *string            `json:"tag,omitempty"`
+	AttachedTo        *string            `json:"attached_to,omitempty"`
+	Mode              *string            `json:"mode,omitempty"`
+	AttachedDevices   *[]string          `json:"attached_devices,omitempty"`
+	BondOptions       *string            `json:"bond_options,omitempty"`
+	ComputeAttributes *ComputeAttributes `json:"compute_attributes,omitempty"`
+}
+
+// HostParameterAttributes represents the Host's parameters.
+type HostParameterAttributes struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
 func (s *HostsService) GetByID(id string) (*Host, *Response, error) {
 	// According to the API docs, there should be no leading or trailing whitespace.
 	// Instead of leaving that up to the user, I prefer to just go ahead and take care
@@ -112,49 +157,4 @@ func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 	}
 
 	return h, resp, err
-}
-
-// ComputeAttributes represents the attributes of a host.
-type ComputeAttributes struct {
-	CPUs               *int    `json:"cpus,omitempty"`
-	Cores              *int    `json:"corespersocket,omitempty"`
-	Memory             *int    `json:"memory_mb,omitempty"`
-	Cluster            *string `json:"cluster,omitempty"`
-	Path               *string `json:"path,omitempty"`
-	GuestID            *string `json:"guest_id,omitempty"`
-	SCSIControllerType *string `json:"scsi_controller_type,omitempty"`
-	HardwareVersion    *string `json:"hardware_version,omitempty"`
-	Start              *bool   `json:"start,omitempty"`
-}
-
-// InterfaceAttributes represents the attributes of a hosts' interface(s).
-type InterfaceAttributes struct {
-	Mac               *string            `json:"mac,omitempty"`
-	IP                *string            `json:"ip,omitempty"`
-	IP6               *string            `json:"ip6,omitempty"`
-	Type              *string            `json:"type,omitempty"`
-	Name              *string            `json:"name,omitempty"`
-	SubnetID          *int               `json:"subnet_id,omitempty"`
-	Subnet6ID         *int               `json:"subnet6_id,omitempty"`
-	DomainID          *int               `json:"domain_id,omitempty"`
-	Identifier        *string            `json:"identifier,omitempty"`
-	Managed           *bool              `json:"managed,omitempty"`
-	Primary           *bool              `json:"primary,omitempty"`
-	Provision         *bool              `json:"provision,omitempty"`
-	Username          *string            `json:"username,omitempty"`
-	Password          *string            `json:"password,omitempty"`
-	Provider          *string            `json:"provider,omitempty"`
-	Virtual           *bool              `json:"virtual,omitempty"`
-	Tag               *string            `json:"tag,omitempty"`
-	AttachedTo        *string            `json:"attached_to,omitempty"`
-	Mode              *string            `json:"mode,omitempty"`
-	AttachedDevices   *[]string          `json:"attached_devices,omitempty"`
-	BondOptions       *string            `json:"bond_options,omitempty"`
-	ComputeAttributes *ComputeAttributes `json:"compute_attributes,omitempty"`
-}
-
-// HostParameterAttributes represents the Host's parameters.
-type HostParameterAttributes struct {
-	Name  *string `json:"name,omitempty"`
-	Value *string `json:"value,omitempty"`
 }
