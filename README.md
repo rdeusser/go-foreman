@@ -12,4 +12,4 @@ to be able to use [this](https://github.com/ory-am/dockertest/tree/v3) to spin u
 
 ## Can I help?
 Of course! I love Pull Requests! I've linked above for how the general design of the library should work and [here](https://theforeman.org/api/1.13/index.html)
-are the API docs for Foreman. Just find something you want to implement and do it!
+are the API docs for Foreman. Just find something you want to implement!
