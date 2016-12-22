@@ -1,5 +1,5 @@
 # go-foreman
-Go library for accessing the Foreman API: https://en.wikipedia.org/wiki/Foreman_(software).
+Go library for accessing the Foreman API: https://theforeman.org/.
 
 The general design and implementation (and some code) of this comes from the [go-github](https://github.com/google/go-github) library from Google (shout out to Will Norris!).
 
