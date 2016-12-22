@@ -1,9 +1,6 @@
 package foreman
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 type HostsService service
 
@@ -42,6 +39,10 @@ type Host struct {
 	ComputeProfileID        *int                     `json:"compute_profile_id,omitempty"`
 	InterfaceAttributes     *InterfaceAttributes     `json:"interface_attributes,omitempty"`
 	ComputeAttributes       *ComputeAttributes       `json:"compute_attributes,omitempty"`
+}
+
+func (h Host) String() string {
+	return Stringify(h)
 }
 
 // ComputeAttributes represents the attributes of a host.
@@ -89,12 +90,7 @@ type HostParameterAttributes struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (s *HostsService) GetByID(id string) (*Host, *Response, error) {
-	// According to the API docs, there should be no leading or trailing whitespace.
-	// Instead of leaving that up to the user, I prefer to just go ahead and take care
-	// of that for them.
-	id = strings.TrimSpace(id)
-
+func (s *HostsService) Get(id string) (*Host, *Response, error) {
 	u := fmt.Sprintf("api/hosts/%s", id)
 
 	req, err := s.client.NewRequest("GET", u, nil)
