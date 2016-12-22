@@ -28,6 +28,27 @@ func TestHostsService_Get_Host(t *testing.T) {
 	}
 }
 
+func TestHostsService_Get_All(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/hosts", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		fmt.Fprint(w, `[{"Name":"host01"}]`)
+	})
+
+	opt := &HostGetAllOptions{1, 1, 1, 1, 1, 1, GetOptions{2, 3}}
+	hosts, _, err := client.Hosts.GetAll(opt)
+	if err != nil {
+		t.Errorf("Hosts.GetAll returned error: %v", err)
+	}
+
+	expected := []*Host{{Name: String("host01")}}
+	if !reflect.DeepEqual(hosts, expected) {
+		t.Errorf("Hosts.GetAll: \n\n%#v\n\n%#v\n\n", hosts, expected)
+	}
+}
+
 func TestHostsService_Create_Host(t *testing.T) {
 	setup()
 	defer teardown()

@@ -108,12 +108,12 @@ func (s *HostsService) Get(id string) (*Host, *Response, error) {
 }
 
 type HostGetAllOptions struct {
-	HostGroupID    string `url:"hostgroup_id,omitempty"`
-	LocationID     string `url:"location_id,omitempty"`
-	OrganizationID string `url:"organization_id,omitempty"`
-	EnvironmentID  string `url:"environment_id,omitempty"`
-	Search         string `url:"search,omitempty"`
-	Order          string `url:"order,omitempty"`
+	HostGroupID    int `url:"hostgroup_id,omitempty"`
+	LocationID     int `url:"location_id,omitempty"`
+	OrganizationID int `url:"organization_id,omitempty"`
+	EnvironmentID  int `url:"environment_id,omitempty"`
+	Search         int `url:"search,omitempty"`
+	Order          int `url:"order,omitempty"`
 
 	GetOptions
 }

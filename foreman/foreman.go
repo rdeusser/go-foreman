@@ -36,8 +36,8 @@ type service struct {
 }
 
 type GetOptions struct {
-	Page    string `url:"page,omitempty"`
-	PerPage string `url:"per_page,omitempty"`
+	Page    int `url:"page,omitempty"`
+	PerPage int `url:"per_page,omitempty"`
 }
 
 func NewClient(httpClient *http.Client) *Client {
