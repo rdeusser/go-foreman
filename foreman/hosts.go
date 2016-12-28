@@ -10,13 +10,13 @@ type Host struct {
 	OrganizationID          *int                     `json:"organization_id,omitempty"`
 	EnvironmentID           *string                  `json:"environment_id,omitempty"`
 	IP                      *string                  `json:"ip,omitempty"`
-	Mac                     *string                  `json:"mac,omitempty"`
+	MAC                     *string                  `json:"mac,omitempty"`
 	ArchitectureID          *int                     `json:"architecture_id,omitempty"`
 	DomainID                *int                     `json:"domain_id,omitempty"`
 	RealmID                 *int                     `json:"realm_id,omitempty"`
 	PuppetProxyID           *int                     `json:"puppet_proxy_id,omitempty"`
 	PuppetClassIDs          *[]int                   `json:"puppetclass_ids,omitempty"`
-	OperatingSystemID       *string                  `json:"operating_system_id,omitempty"`
+	OperatingSystemID       *string                  `json:"operatingsystem_id,omitempty"`
 	MediumID                *string                  `json:"medium_id,omitempty"`
 	PTableID                *int                     `json:"ptable_id,omitempty"`
 	SubnetID                *int                     `json:"subnet_id,omitempty"`
@@ -37,6 +37,7 @@ type Host struct {
 	Comment                 *string                  `json:"comment,omitempty"`
 	Capabilities            *string                  `json:"capabilities,omitempty"`
 	ComputeProfileID        *int                     `json:"compute_profile_id,omitempty"`
+	RootPassword            *string                  `json:"root_pass,omitempty"`
 	InterfaceAttributes     *InterfaceAttributes     `json:"interface_attributes,omitempty"`
 	ComputeAttributes       *ComputeAttributes       `json:"compute_attributes,omitempty"`
 }
@@ -47,7 +48,7 @@ func (h Host) String() string {
 
 // InterfaceAttributes represents the attributes of a hosts' interface(s).
 type InterfaceAttributes struct {
-	Mac               *string            `json:"mac,omitempty"`
+	MAC               *string            `json:"mac,omitempty"`
 	IP                *string            `json:"ip,omitempty"`
 	IP6               *string            `json:"ip6,omitempty"`
 	Type              *string            `json:"type,omitempty"`
@@ -85,13 +86,13 @@ func (s *HostsService) Get(id string) (*Host, *Response, error) {
 		return nil, nil, err
 	}
 
-	host := new(Host)
-	resp, err := s.client.Do(req, host)
+	h := new(Host)
+	resp, err := s.client.Do(req, h)
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
-	return host, resp, err
+	return h, resp, err
 }
 
 type HostGetAllOptions struct {
@@ -116,13 +117,13 @@ func (s *HostsService) GetAll(opt *HostGetAllOptions) ([]*Host, *Response, error
 		return nil, nil, err
 	}
 
-	hosts := new([]*Host)
-	resp, err := s.client.Do(req, hosts)
+	h := new([]*Host)
+	resp, err := s.client.Do(req, h)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return *hosts, resp, err
+	return *h, resp, err
 }
 
 func (s *HostsService) Create(host *Host) (*Host, *Response, error) {

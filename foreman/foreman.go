@@ -28,7 +28,8 @@ type Client struct {
 	common service
 
 	// Services used for talking to different parts of the Foreman API.
-	Hosts *HostsService
+	Hosts      *HostsService
+	Hostgroups *HostgroupsService
 }
 
 type service struct {
@@ -50,6 +51,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c := &Client{client: httpClient, BaseURL: baseURL}
 	c.common.client = c
 	c.Hosts = (*HostsService)(&c.common)
+	c.Hostgroups = (*HostgroupsService)(&c.common)
 
 	return c
 }
