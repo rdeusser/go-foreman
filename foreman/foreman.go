@@ -165,12 +165,10 @@ func addOptions(s string, opt interface{}) (string, error) {
 }
 
 // BasicAuthTransport is an http.RoundTripper that authenticates all requests
-// using HTTP Basic Authentication with the provided username and password.  It
-// additionally supports users who have two-factor authentication enabled on
-// their GitHub account.
+// using HTTP Basic Authentication with the provided username and password.
 type BasicAuthTransport struct {
-	Username string // GitHub username
-	Password string // GitHub password
+	Username string
+	Password string
 
 	// Transport is the underlying HTTP transport to use when making requests.
 	// It will default to http.DefaultTransport if nil.

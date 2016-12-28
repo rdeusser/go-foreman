@@ -66,6 +66,7 @@ func TestString(t *testing.T) {
 		out string
 	}{
 		{Host{Name: String("host01")}, `foreman.Host{Name:"host01"}`},
+		{Hostgroup{Name: String("hostgroup01")}, `foreman.Hostgroup{Name:"hostgroup01"}`},
 	}
 
 	for i, tt := range tests {
