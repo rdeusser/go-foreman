@@ -142,3 +142,14 @@ func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 
 	return h, resp, err
 }
+
+func (s *HostsService) Delete(id string) (*Response, error) {
+	u := fmt.Sprintf("api/hosts/%s", id)
+
+	req, err := s.client.NewRequest("DELETE", u, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.client.Do(req, nil)
+}

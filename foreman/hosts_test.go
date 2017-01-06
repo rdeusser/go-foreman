@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHostsService_Get_Host(t *testing.T) {
+func TestHostsService_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -49,7 +49,7 @@ func TestHostsService_Get_All(t *testing.T) {
 	}
 }
 
-func TestHostsService_Create_Host(t *testing.T) {
+func TestHostsService_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -75,5 +75,19 @@ func TestHostsService_Create_Host(t *testing.T) {
 	expected := &Host{Name: String("host01")}
 	if !reflect.DeepEqual(host, expected) {
 		t.Errorf("Hosts.Create returned %+v, expected %+v", host, expected)
+	}
+}
+
+func TestHostsService_Delete(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/api/hosts/host01", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "DELETE")
+	})
+
+	_, err := client.Hosts.Delete("host01")
+	if err != nil {
+		t.Errorf("Hosts.Delete returned %v", err)
 	}
 }
