@@ -2,6 +2,7 @@ package foreman
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -89,9 +90,33 @@ type Response struct {
 	*http.Response
 }
 
-func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
+// Do sends an API request and returns the API response. The API response is
+// JSON decoded and stored in the value pointed to by v, or returned as an
+// error if an API error has occurred. If v implements the io.Writer
+// interface, the raw response body will be written to v, without attempting to
+// first decode it.
+//
+// The provided ctx must be non-nil. If it is canceled or times out,
+// ctx.Err() will be returned.
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
 	resp, err := c.client.Do(req)
 	if err != nil {
+		// If we got an error, and the context has been canceled,
+		// the context's error is probably more useful.
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+
+		// If the error type is *url.Error, sanitize its URL before returning.
+		if e, ok := err.(*url.Error); ok {
+			if url, err := url.Parse(e.URL); err == nil {
+				e.URL = sanitizeURL(url).String()
+				return nil, e
+			}
+		}
+
 		return nil, err
 	}
 
@@ -122,6 +147,20 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 	}
 
 	return response, err
+}
+
+// sanitizeURL redacts the root_pass parameter from the URL which may be
+// exposed to the user.
+func sanitizeURL(uri *url.URL) *url.URL {
+	if uri == nil {
+		return nil
+	}
+	params := uri.Query()
+	if len(params.Get("root_pass")) > 0 {
+		params.Set("root_pass", "REDACTED")
+		uri.RawQuery = params.Encode()
+	}
+	return uri
 }
 
 func newResponse(r *http.Response) *Response {

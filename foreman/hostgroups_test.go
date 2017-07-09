@@ -1,6 +1,7 @@
 package foreman
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -17,7 +18,7 @@ func TestHostgroupsService_Get_Hostgroup(t *testing.T) {
 		fmt.Fprint(w, `{"name":"hostgroup01"}`)
 	})
 
-	hostgroup, _, err := client.Hostgroups.Get("hostgroup01")
+	hostgroup, _, err := client.Hostgroups.Get(context.Background(), "hostgroup01")
 	if err != nil {
 		t.Errorf("Hosts.Get returned error: %v", err)
 	}
@@ -38,7 +39,7 @@ func TestHostgroupsService_Get_All(t *testing.T) {
 	})
 
 	opt := &HostgroupGetAllOptions{"", "", "", GetOptions{2, 3}}
-	hostgroups, _, err := client.Hostgroups.GetAll(opt)
+	hostgroups, _, err := client.Hostgroups.GetAll(context.Background(), opt)
 	if err != nil {
 		t.Errorf("Hosts.GetAll returned error: %v", err)
 	}
@@ -67,7 +68,7 @@ func TestHostgroupsService_Create_Hostgroup(t *testing.T) {
 		fmt.Fprint(w, `{"name":"hostgroup01"}`)
 	})
 
-	hostgroup, _, err := client.Hostgroups.Create(input)
+	hostgroup, _, err := client.Hostgroups.Create(context.Background(), input)
 	if err != nil {
 		t.Errorf("Hosts.Create returned error: %v", err)
 	}

@@ -1,6 +1,9 @@
 package foreman
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type HostsService service
 
@@ -21,7 +24,6 @@ type Host struct {
 	PTableID                *int                     `json:"ptable_id,omitempty"`
 	SubnetID                *int                     `json:"subnet_id,omitempty"`
 	ComputeResourceID       *int                     `json:"compute_resource_id,omitempty"`
-	RootPass                *string                  `json:"root_pass,omitempty"`
 	ModelID                 *int                     `json:"model_id,omitempty"`
 	HostGroupID             *int                     `json:"hostgroup_id,omitempty"`
 	OwnerID                 *int                     `json:"owner_id,omitempty"`
@@ -78,23 +80,6 @@ type HostParameterAttributes struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (s *HostsService) Get(id string) (*Host, *Response, error) {
-	u := fmt.Sprintf("api/hosts/%s", id)
-
-	req, err := s.client.NewRequest("GET", u, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	h := new(Host)
-	resp, err := s.client.Do(req, h)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return h, resp, err
-}
-
 type HostGetAllOptions struct {
 	HostGroupID    int `url:"hostgroup_id,omitempty"`
 	LocationID     int `url:"location_id,omitempty"`
@@ -106,7 +91,7 @@ type HostGetAllOptions struct {
 	GetOptions
 }
 
-func (s *HostsService) GetAll(opt *HostGetAllOptions) ([]*Host, *Response, error) {
+func (s *HostsService) GetAll(ctx context.Context, opt *HostGetAllOptions) ([]*Host, *Response, error) {
 	u, err := addOptions("api/hosts", opt)
 	if err != nil {
 		return nil, nil, err
@@ -118,7 +103,7 @@ func (s *HostsService) GetAll(opt *HostGetAllOptions) ([]*Host, *Response, error
 	}
 
 	h := new([]*Host)
-	resp, err := s.client.Do(req, h)
+	resp, err := s.client.Do(ctx, req, h)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -126,7 +111,24 @@ func (s *HostsService) GetAll(opt *HostGetAllOptions) ([]*Host, *Response, error
 	return *h, resp, err
 }
 
-func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
+func (s *HostsService) Get(ctx context.Context, id string) (*Host, *Response, error) {
+	u := fmt.Sprintf("api/hosts/%s", id)
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	h := new(Host)
+	resp, err := s.client.Do(ctx, req, h)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return h, resp, err
+}
+
+func (s *HostsService) Create(ctx context.Context, host *Host) (*Host, *Response, error) {
 	u := "api/hosts"
 
 	req, err := s.client.NewRequest("POST", u, host)
@@ -135,7 +137,7 @@ func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 	}
 
 	h := new(Host)
-	resp, err := s.client.Do(req, h)
+	resp, err := s.client.Do(ctx, req, h)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -143,7 +145,24 @@ func (s *HostsService) Create(host *Host) (*Host, *Response, error) {
 	return h, resp, err
 }
 
-func (s *HostsService) Delete(id string) (*Response, error) {
+func (s *HostsService) Update(ctx context.Context, id string, host *Host) (*Host, *Response, error) {
+	u := fmt.Sprintf("api/hosts/%s", id)
+
+	req, err := s.client.NewRequest("PUT", u, host)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	h := new(Host)
+	resp, err := s.client.Do(ctx, req, h)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return h, resp, err
+}
+
+func (s *HostsService) Delete(ctx context.Context, id string) (*Response, error) {
 	u := fmt.Sprintf("api/hosts/%s", id)
 
 	req, err := s.client.NewRequest("DELETE", u, nil)
@@ -151,5 +170,5 @@ func (s *HostsService) Delete(id string) (*Response, error) {
 		return nil, err
 	}
 
-	return s.client.Do(req, nil)
+	return s.client.Do(ctx, req, nil)
 }

@@ -1,13 +1,14 @@
 package foreman
 
 import (
+	"context"
 	"fmt"
 )
 
 type HostgroupsService service
 
 type Hostgroup struct {
-	Name              *string `json:"name"'`
+	Name              *string `json:"name"`
 	ParentID          *int    `json:"parent_id"`
 	EnvironmentID     *int    `json:"environment_id"`
 	ComputeProfileID  *int    `json:"compute_profile_id"`
@@ -24,27 +25,6 @@ type Hostgroup struct {
 	RootPassword      *string `json:"root_pass"`
 }
 
-func (h Hostgroup) String() string {
-	return Stringify(h)
-}
-
-func (s *HostgroupsService) Get(id string) (*Hostgroup, *Response, error) {
-	u := fmt.Sprintf("api/hostgroups/%s", id)
-
-	req, err := s.client.NewRequest("GET", u, nil)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	h := new(Hostgroup)
-	resp, err := s.client.Do(req, h)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return h, resp, err
-}
-
 type HostgroupGetAllOptions struct {
 	PuppetClassID string `url:"puppetclass_id"`
 	Search        string `url:"search"`
@@ -53,7 +33,11 @@ type HostgroupGetAllOptions struct {
 	GetOptions
 }
 
-func (s *HostgroupsService) GetAll(opt *HostgroupGetAllOptions) ([]*Hostgroup, *Response, error) {
+func (h Hostgroup) String() string {
+	return Stringify(h)
+}
+
+func (s *HostgroupsService) GetAll(ctx context.Context, opt *HostgroupGetAllOptions) ([]*Hostgroup, *Response, error) {
 	u, err := addOptions("api/hostgroups", opt)
 	if err != nil {
 		return nil, nil, err
@@ -65,7 +49,7 @@ func (s *HostgroupsService) GetAll(opt *HostgroupGetAllOptions) ([]*Hostgroup, *
 	}
 
 	h := new([]*Hostgroup)
-	resp, err := s.client.Do(req, h)
+	resp, err := s.client.Do(ctx, req, h)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -73,7 +57,24 @@ func (s *HostgroupsService) GetAll(opt *HostgroupGetAllOptions) ([]*Hostgroup, *
 	return *h, resp, err
 }
 
-func (s *HostgroupsService) Create(hostgroup *Hostgroup) (*Hostgroup, *Response, error) {
+func (s *HostgroupsService) Get(ctx context.Context, id string) (*Hostgroup, *Response, error) {
+	u := fmt.Sprintf("api/hostgroups/%s", id)
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	h := new(Hostgroup)
+	resp, err := s.client.Do(ctx, req, h)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return h, resp, err
+}
+
+func (s *HostgroupsService) Create(ctx context.Context, hostgroup *Hostgroup) (*Hostgroup, *Response, error) {
 	u := "api/hostgroups"
 
 	req, err := s.client.NewRequest("POST", u, hostgroup)
@@ -82,7 +83,7 @@ func (s *HostgroupsService) Create(hostgroup *Hostgroup) (*Hostgroup, *Response,
 	}
 
 	h := new(Hostgroup)
-	resp, err := s.client.Do(req, h)
+	resp, err := s.client.Do(ctx, req, h)
 	if err != nil {
 		return nil, resp, err
 	}
