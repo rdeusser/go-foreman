@@ -25,16 +25,16 @@ type Hostgroup struct {
 	RootPassword      *string `json:"root_pass"`
 }
 
+func (h Hostgroup) String() string {
+	return Stringify(h)
+}
+
 type HostgroupGetAllOptions struct {
 	PuppetClassID string `url:"puppetclass_id"`
 	Search        string `url:"search"`
 	Order         string `url:"order"`
 
 	GetOptions
-}
-
-func (h Hostgroup) String() string {
-	return Stringify(h)
 }
 
 func (s *HostgroupsService) GetAll(ctx context.Context, opt *HostgroupGetAllOptions) ([]*Hostgroup, *Response, error) {

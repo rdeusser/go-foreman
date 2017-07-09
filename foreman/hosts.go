@@ -44,10 +44,6 @@ type Host struct {
 	ComputeAttributes       *ComputeAttributes       `json:"compute_attributes,omitempty"`
 }
 
-func (h Host) String() string {
-	return Stringify(h)
-}
-
 // InterfaceAttributes represents the attributes of a hosts' interface(s).
 type InterfaceAttributes struct {
 	MAC               *string            `json:"mac,omitempty"`
@@ -78,6 +74,10 @@ type InterfaceAttributes struct {
 type HostParameterAttributes struct {
 	Name  *string `json:"name,omitempty"`
 	Value *string `json:"value,omitempty"`
+}
+
+func (h Host) String() string {
+	return Stringify(h)
 }
 
 type HostGetAllOptions struct {
